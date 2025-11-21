@@ -4,7 +4,7 @@ int main() {
     // Variables à modifier pour tester
     int num1 = 12;
     int num2 = 5;
-    char op = '&'; // Change ce symbole pour tester (+, -, *, /, %, &, |, ~)
+    char op = '*'; // Change ce symbole pour tester (+, -, *, /, %, &, |, ~)
 
     printf("Operation demandee : %d %c %d\n", num1, op, num2);
 
@@ -55,3 +55,4 @@ int main() {
 
     return 0;
 }
+
