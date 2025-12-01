@@ -18,36 +18,41 @@ void run_ex41() {
     printf("\n==============================================\n");
     printf("      EXERCICE 4.1 : CALCULATRICE             \n");
     printf("==============================================\n");
-    printf("INSTRUCTION : Tapez les nombres un par un.\n");
-    printf("Ne tapez PAS '5*5' d'un coup.\n\n");
+    printf("INSTRUCTION : Tapez les nombres un par un.\n\n");
     
     // --- ETAPE 1 : PREMIER NOMBRE ---
-    printf("1. Entrez le premier nombre entier (ex: 10) puis appuyez sur ENTREE :\n");
-    printf("   Votre nombre : ");
+    printf("1. Entrez le premier nombre entier (ex: 10)\n");
+    printf("   Votre nombre : "); 
+    fflush(stdout); // Force l'affichage du texte AVANT la saisie
+    
     while (scanf("%d", &n1) != 1) { 
-        printf("   (!) Ce n'est pas un nombre valide. Réesseyez : ");
+        printf("   (!) Invalide. Réesseyez : ");
+        fflush(stdout);
         vider_buffer(); 
     }
 
     // --- ETAPE 2 : DEUXIEME NOMBRE ---
-    printf("\n2. Entrez le deuxieme nombre entier (ex: 5) puis appuyez sur ENTREE :\n");
+    printf("\n2. Entrez le deuxieme nombre entier (ex: 5)\n");
     printf("   Votre nombre : ");
+    fflush(stdout);
+
     while (scanf("%d", &n2) != 1) {
-        printf("   (!) Ce n'est pas un nombre valide. Réesseyez : ");
+        printf("   (!) Invalide. Réesseyez : ");
+        fflush(stdout);
         vider_buffer();
     }
     
-    // Nettoyage de sécurité avant de demander le caractère
-    vider_buffer(); 
+    vider_buffer(); // Nettoyage de sécurité
 
     // --- ETAPE 3 : OPERATEUR ---
-    printf("\n3. Choisissez l'opération à effectuer.\n");
-    printf("   Symboles disponibles : +  -  * /  %%  &  |  ~\n");
+    printf("\n3. Choisissez l'opération (+ - * / %% & | ~)\n");
     printf("   Votre opérateur : ");
+    fflush(stdout);
+    
     scanf("%c", &op); 
 
     int res = 0;
-    // Vérification pour éviter la division par zéro avant le calcul
+    // Vérification division par zéro
     if ((op == '/' || op == '%') && n2 == 0) {
         printf("\n(!) Erreur : Division par zéro impossible !\n");
         return;
@@ -61,12 +66,12 @@ void run_ex41() {
         case '%': res = modulo(n1, n2); break;
         case '&': res = et_logique(n1, n2); break;
         case '|': res = ou_logique(n1, n2); break;
-        case '~': res = negation(n1); printf("(Note : le 2ème nombre a été ignoré pour le ~)\n"); break;
-        default: printf("\n(!) Operateur '%c' non reconnu.\n", op); return;
+        case '~': res = negation(n1); break;
+        default: printf("\n(!) Operateur non reconnu.\n"); return;
     }
 
     printf("\n----------------------------------------------\n");
-    printf("   RÉSULTAT DU CALCUL : %d\n", res);
+    printf("   RÉSULTAT : %d\n", res);
     printf("----------------------------------------------\n");
 }
 
@@ -80,9 +85,10 @@ void run_ex42() {
     printf("      EXERCICE 4.2 : GESTION DE FICHIERS      \n");
     printf("==============================================\n");
     printf("Que voulez-vous faire ?\n");
-    printf("   [1] -> LIRE le contenu d'un fichier existant\n");
-    printf("   [2] -> ECRIRE un message dans un fichier\n");
-    printf("   Votre choix (1 ou 2) : ");
+    printf("   [1] LIRE un fichier\n");
+    printf("   [2] ECRIRE dans un fichier\n");
+    printf("   Votre choix : ");
+    fflush(stdout);
     
     if (scanf("%d", &choix) != 1) {
         printf("(!) Choix invalide.\n");
@@ -93,23 +99,27 @@ void run_ex42() {
 
     if (choix == 1) {
         printf("\n--- MODE LECTURE ---\n");
-        printf("Entrez le nom du fichier (ex: fichier.txt) : ");
+        printf("Nom du fichier à lire : ");
+        fflush(stdout);
         scanf("%s", nom_fic);
-        printf("\n--- Début du contenu ---\n");
-        lire_fichier(nom_fic); // Fonction définie dans fichier.c
-        printf("\n--- Fin du contenu ---\n");
+        
+        printf("\n--- Contenu du fichier ---\n");
+        lire_fichier(nom_fic); 
+        printf("\n--------------------------\n");
 
     } else if (choix == 2) {
         printf("\n--- MODE ECRITURE ---\n");
-        printf("1. Nom du fichier à créer/écraser (ex: test.txt) : ");
+        printf("Nom du fichier : ");
+        fflush(stdout);
         scanf("%s", nom_fic);
-        vider_buffer(); // Important
+        vider_buffer(); 
         
-        printf("2. Tapez le message à écrire (puis Entrée) : ");
+        printf("Message à écrire : ");
+        fflush(stdout);
         fgets(message, 256, stdin); 
         
-        ecrire_dans_fichier(nom_fic, message); // Fonction définie dans fichier.c
-        printf("--> Succès : Message enregistré dans '%s'.\n", nom_fic);
+        ecrire_dans_fichier(nom_fic, message);
+        printf("--> Succès.\n");
     } else {
         printf("(!) Option inconnue.\n");
     }
@@ -121,24 +131,20 @@ void run_ex47() {
     init_liste(&ma_liste);
     
     printf("\n==============================================\n");
-    printf("      EXERCICE 4.7 : LISTE CHAINEE (COULEURS) \n");
+    printf("      EXERCICE 4.7 : LISTE CHAINEE            \n");
     printf("==============================================\n");
-    printf("Le programme va générer 10 couleurs aléatoires\n");
-    printf("et les ajouter automatiquement dans une liste...\n");
+    printf("Génération de 10 couleurs aléatoires...\n");
     
-    // Petite pause simulée ou message d'attente (optionnel)
-    printf("Génération en cours...\n");
-
     for(int i=0; i<10; i++) {
         struct couleur c;
         c.r = rand() % 256;
         c.g = rand() % 256;
         c.b = rand() % 256;
-        c.a = 255; // Alpha opaque
+        c.a = 255; 
         insertion(&c, &ma_liste);
     }
 
-    printf("Terminé. Voici le contenu de la liste :\n");
+    printf("Voici la liste générée :\n");
     printf("----------------------------------------------\n");
     parcours(&ma_liste);
     printf("----------------------------------------------\n");
@@ -153,15 +159,15 @@ int main() {
         printf("##############################################\n");
         printf("#               MENU PRINCIPAL               #\n");
         printf("##############################################\n");
-        printf("Choisissez un exercice à tester :\n\n");
-        printf("   [1] Calculatrice (Opérations +, -, *, etc.)\n");
-        printf("   [2] Fichiers (Lecture / Écriture)\n");
-        printf("   [3] Liste Chaînée (Couleurs RGB)\n");
-        printf("   [4] Quitter le programme\n");
-        printf("\nVotre choix (tapez le numéro puis Entrée) : ");
+        printf("   [1] Calculatrice\n");
+        printf("   [2] Fichiers\n");
+        printf("   [3] Liste Couleurs\n");
+        printf("   [4] Quitter\n");
+        printf("\nVotre choix : ");
+        fflush(stdout); // Important pour que le curseur reste sur la ligne
         
         if (scanf("%d", &choix) != 1) {
-            printf("\n(!) Erreur : Vous devez taper un chiffre (1, 2, 3 ou 4).\n");
+            printf("\n(!) Tapez un chiffre entre 1 et 4.\n");
             vider_buffer(); 
             continue; 
         }
@@ -174,7 +180,7 @@ int main() {
                 printf("Au revoir !\n");
                 return 0;
             default: 
-                printf("\n(!) Ce numéro n'est pas dans le menu.\n");
+                printf("\n(!) Choix invalide.\n");
         }
     }
     return 0;
